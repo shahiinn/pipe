@@ -3,6 +3,6 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: myGitHub
-      path: shahiinn/pipe
+      path: shahiinn/project-examples
       branches:
         include: master
