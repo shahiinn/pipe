@@ -14,7 +14,7 @@ resources:
       buildName: Shahin_test
       buildNumber: 1
  
- pipelines: 
+pipelines: 
   - name: basic_pipeline
     configuration:
       environmentVariables:
