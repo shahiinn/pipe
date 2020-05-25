@@ -1,8 +1,15 @@
 resources:
-  - name: app
+  - name: myGitRepo
     type: GitRepo
     configuration:
-      gitProvider: myGitHub
-      path: shahiinn/project-examples
+      gitProvider: my_github                       # <- Change to your integration name
+      path: shahiinn/pipe   # <- Change to your forked repo
       branches:
         include: master
+ 
+  - name: myBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: chart_rt                       # <- Change to your integration name
+      buildName: Shahin_test
+      buildNumber: 1  
