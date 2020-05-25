@@ -2,7 +2,7 @@ resources:
   - name: myGitRepo
     type: GitRepo
     configuration:
-      gitProvider: my_github                       # <- Change to your integration name
+      gitProvider: shahin_test                       # <- Change to your integration name
       path: shahiinn/pipe   # <- Change to your forked repo
       branches:
         include: master
