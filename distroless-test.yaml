@@ -1,18 +1,18 @@
 resources:
-  - name: distrolessGithubRepo
+  - name: distroless_base_image
     type: GitRepo
     configuration:
       gitProvider: shahin_test
       path: shahiinn/jfrog-distroless
       branches:
         include: ^{{gitBranch}}$
-  - name: file_test
+  - name: file_start
     type: FileSpec
     configuration:     
       sourceArtifactory: artifact_test
       pattern: testrepo1/distro-build.sh
       target: distro-build.sh        
-  - name: distrolessArtifactory
+  - name: charttestingArtifactory
     type: BuildInfo
     configuration:
       sourceArtifactory: artifact_test
@@ -25,9 +25,9 @@ pipelines:
         type: Bash
         configuration:
           inputResources:
-            - name: file_test
+            - name: file_start
           outputResources:
-            - name: distrolessGithubRepo
+            - name: distroless_base_image
         execution:
           onExecute:
             - echo "Starting the build"
@@ -46,9 +46,9 @@ pipelines:
           inputSteps:
             - name: Start
           inputResources:
-            - name: distrolessGithubRepo
+            - name: distroless_base_image
           outputResources:
-            - name: distrolessArtifactory
+            - name: charttestingArtifactory
           integrations:
             - name: artifact_test
         execution:
