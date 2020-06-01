@@ -59,5 +59,7 @@ pipelines:
 #            - docker login -u $int_artifact_test_username -p $int_artifact_test_apikey $int_artifact_test_url
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/artifactory-sh"
             - ls -l
+            - ls -l bazel-out
+            - tree bazel-out
             - docker ps -a
             - docker images
