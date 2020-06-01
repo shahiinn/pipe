@@ -36,8 +36,8 @@ pipelines:
       - name: Bazel_build_artifactory
         type: Bash
         configuration:
-#          runtime:
-#            type: image
+          runtime:
+            type: host
 #            image:
 #              custom:
 #                name: insready/bazel
