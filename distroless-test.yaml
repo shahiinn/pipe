@@ -57,7 +57,7 @@ pipelines:
             - pushd $res_distroless_base_image_resourcePath
             - docker ps
 #            - docker login -u $int_artifact_test_username -p $int_artifact_test_apikey $int_artifact_test_url
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c " bazel build all && bazel test --test_output=errors --curses=no //..."
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/artifactory-sh"
             - ls -l
             - docker ps -a
             - docker images
