@@ -1,5 +1,5 @@
 resources:
-  - name: appRepo
+  - name: distrolessGithubRepo
     type: GitRepo
     configuration:
       gitProvider: shahin_test
