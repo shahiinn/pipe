@@ -38,7 +38,10 @@ pipelines:
         configuration:
           runtime:
             type: image
-            image: bazel-docker-builder:latest
+            image:
+              custom:
+                name: bazel-docker-builder
+                tag: latest
           affinityGroup: image1
           inputSteps:
             - name: Start
