@@ -54,5 +54,5 @@ pipelines:
         execution:
           onExecute:
             - echo "Starting the build"
-            - pushd $res_distrolessGithubRepo_resourcePath
+            - pushd $res_distroless_base_image_resourcePath
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c " bazel build base/artifactory-sh"
