@@ -40,7 +40,7 @@ pipelines:
             type: image
             image:
               custom:
-                name: bazel-docker-builder
+                name: insready/bazel
                 tag: latest
           affinityGroup: image1
           inputSteps:
