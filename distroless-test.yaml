@@ -33,15 +33,11 @@ pipelines:
             - echo "Starting the build"
           onSuccess:
             - echo "Triggered the build"
-      - name: Bazel_build_artifactory
+      - name: Bazel_build_artifactory_sh
         type: Bash
         configuration:
           runtime:
             type: host
-#            image:
-#              custom:
-#                name: insready/bazel
-#                tag: latest
           affinityGroup: image1
           inputSteps:
             - name: Start
@@ -55,11 +51,101 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
-            - docker ps
-#            - docker login -u $int_artifact_test_username -p $int_artifact_test_apikey $int_artifact_test_url
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/artifactory-sh && bazel run base/artifactory-sh"
-#            - ls -l
-#            - ls -l bazel-out
-#            - tree bazel-out
-#            - docker ps -a
-#            - docker images
+      - name: Bazel_build_distribution_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image2
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distroless_base_image
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/distribution-sh && bazel run base/distribution-sh"
+      - name: Bazel_build_insight_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image3
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distroless_base_image
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/insight-sh && bazel run base/insight-sh"
+      - name: Bazel_build_jfmc_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image4
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distroless_base_image
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/jfmc-sh && bazel run base/jfmc-sh"            
+      - name: Bazel_build_router_go
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image5
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distroless_base_image
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/router-go && bazel run base/router-go"            
+      - name: Bazel_build_xray_go
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image6
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distroless_base_image
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c "bazel build base/xray-go && bazel run base/xray-go"            
+            
+            
