@@ -1,0 +1,55 @@
+resources:
+  - name: appRepo
+    type: GitRepo
+    configuration:
+      gitProvider: shahin_test
+      path: shahiinn/jfrog-distroless
+      branches:
+        include: ^{{gitBranch}}$
+  - name: file_test
+    type: FileSpec
+    configuration:     
+      sourceArtifactory: artifact_test
+      pattern: testrepo1/distro-build.sh
+      target: distro-build.sh        
+  - name: distrolessArtifactory
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build
+      buildNumber: ${run_number}
+pipelines:
+  - name: Distroless_base_image_build
+    steps:    
+      - name: Start
+        type: Bash
+        configuration:
+          inputResources:
+            - name: file_test
+          outputResources:
+            - name: distrolessGithubRepo
+        execution:
+          onExecute:
+            - echo "Starting the build"
+          onSuccess:
+            - echo "Triggered the build"
+      - name: Bazel_build_artifactory
+        type: Bash
+        configuration:
+          runtime:
+            type: image
+            image: bazel-docker-builder:latest
+          affinityGroup: image1
+          inputSteps:
+            - name: Start
+          inputResources:
+            - name: distrolessGithubRepo
+          outputResources:
+            - name: distrolessArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distrolessGithubRepo_resourcePath
+            - bazel build base/artifactory-sh
