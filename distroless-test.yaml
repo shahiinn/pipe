@@ -36,12 +36,12 @@ pipelines:
       - name: Bazel_build_artifactory
         type: Bash
         configuration:
-          runtime:
-            type: image
-            image:
-              custom:
-                name: insready/bazel
-                tag: latest
+#          runtime:
+#            type: image
+#            image:
+#              custom:
+#                name: insready/bazel
+#                tag: latest
           affinityGroup: image1
           inputSteps:
             - name: Start
@@ -55,4 +55,4 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distrolessGithubRepo_resourcePath
-            - bazel build base/artifactory-sh
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 insready/bazel bash -c " bazel build base/artifactory-sh"
