@@ -5,13 +5,7 @@ resources:
       gitProvider: shahin_test
       path: shahiinn/jfrog-distroless
       branches:
-        include: ^{{gitBranch}}$
-  - name: file_start
-    type: FileSpec
-    configuration:     
-      sourceArtifactory: artifact_test
-      pattern: testrepo1/distro-build.sh
-      target: distro-build.sh        
+        include: ^{{gitBranch}}$       
   - name: charttestingArtifactory
     type: BuildInfo
     configuration:
@@ -24,8 +18,8 @@ pipelines:
       - name: Start
         type: Bash
         configuration:
-          inputResources:
-            - name: file_start
+#          inputResources:
+#            - name: file_start
           outputResources:
             - name: distroless_base_image
         execution:
