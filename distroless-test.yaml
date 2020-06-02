@@ -287,3 +287,94 @@ pipelines:
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel run base/xray-go"
             - docker images
 
+
+      - name: Push_artifactory_sh
+        type: Bash
+        configuration:
+          affinityGroup: image1
+          inputSteps:
+            - name: Bazel_run_artifactory_sh
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - docker tag bazel/base/artifactory-sh:artifactory-sh chartstesting-distroless-local.jfrog.io/artifactory-sh:${run_number}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/artifactory-sh:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+      - name: Push_distribution_sh
+        type: Bash
+        configuration:
+          affinityGroup: image2
+          inputSteps:
+            - name: Bazel_run_distribution_sh
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - docker tag bazel/base/distribution-sh:distribution-sh chartstesting-distroless-local.jfrog.io/distribution-sh:${run_number}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/distribution-sh:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+      - name: Push_insight_sh
+        type: Bash
+        configuration:
+          affinityGroup: image3
+          inputSteps:
+            - name: Bazel_run_insight_sh
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - docker tag bazel/base/insight-sh:insight-sh chartstesting-distroless-local.jfrog.io/insight-sh:${run_number}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/insight-sh:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+      - name: Push_jfmc_sh
+        type: Bash
+        configuration:
+          affinityGroup: image4
+          inputSteps:
+            - name: Bazel_run_jfmc_sh
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/jfmc-sh:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+      - name: Push_router_go
+        type: Bash
+        configuration:
+          affinityGroup: image5
+          inputSteps:
+            - name: Bazel_run_router_go
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - docker tag bazel/base/router-go:router-go chartstesting-distroless-local.jfrog.io/router-go:${run_number}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/router-go:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+      - name: Push_xray_go
+        type: Bash
+        configuration:
+          affinityGroup: image6
+          inputSteps:
+            - name: Bazel_run_xray_go
+          outputResources:
+            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - docker tag bazel/base/xray-go:xray-go chartstesting-distroless-local.jfrog.io/xray-go:${run_number}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/xray_go:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+
