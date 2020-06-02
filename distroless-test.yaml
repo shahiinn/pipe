@@ -27,6 +27,9 @@ pipelines:
             - echo "Starting the build"
           onSuccess:
             - echo "Triggered the build"
+            
+## bazel build            
+            
       - name: Bazel_build_artifactory_sh
         type: Bash
         configuration:
@@ -45,7 +48,6 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
-            - echo ${int_artifact_test_user} ${int_artifact_test_apikey}
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/artifactory-sh"
           onComplete:
@@ -159,8 +161,11 @@ pipelines:
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/xray-go"
           onComplete:
-            - popd            
-      - name: Bazel_run_artifactory_sh
+            - popd
+            
+## bazel test
+
+      - name: Bazel_test_artifactory_sh
         type: Bash
         configuration:
           runtime:
@@ -168,6 +173,131 @@ pipelines:
           affinityGroup: image1
           inputSteps:
             - name: Bazel_build_artifactory_sh
+          inputResources:
+            - name: distroless_base_image
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+          onComplete:
+            - popd
+      - name: Bazel_test_distribution_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image2
+          inputSteps:
+            - name: Bazel_build_distribution_sh
+          inputResources:
+            - name: distroless_base_image
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+          onComplete:
+            - popd            
+      - name: Bazel_test_insight_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image3
+          inputSteps:
+            - name: Bazel_build_insight_sh
+          inputResources:
+            - name: distroless_base_image
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+          onComplete:
+            - popd            
+      - name: Bazel_test_jfmc_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image4
+          inputSteps:
+            - name: Bazel_build_jfmc_sh
+          inputResources:
+            - name: distroless_base_image
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."   
+          onComplete:
+            - popd            
+      - name: Bazel_test_router_go
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image5
+          inputSteps:
+            - name: Bazel_build_router_go
+          inputResources:
+            - name: distroless_base_image
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 
+          onComplete:
+            - popd            
+      - name: Bazel_test_xray_go
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image6
+          inputSteps:
+            - name: Bazel_build_xray_go
+          inputResources:
+            - name: distroless_base_image
+#          outputResources:
+#            - name: charttestingArtifactory
+          integrations:
+            - name: artifact_test
+        execution:
+          onExecute:
+            - echo "Starting the build"
+            - pushd $res_distroless_base_image_resourcePath
+            - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+          onComplete:
+            - popd
+            
+## bazel run            
+            
+      - name: Bazel_run_artifactory_sh
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          affinityGroup: image1
+          inputSteps:
+            - name: Bazel_test_artifactory_sh
           inputResources:
             - name: distroless_base_image
 #          outputResources:
@@ -188,7 +318,7 @@ pipelines:
             type: host
           affinityGroup: image2
           inputSteps:
-            - name: Bazel_build_distribution_sh
+            - name: Bazel_test_distribution_sh
           inputResources:
             - name: distroless_base_image
 #          outputResources:
@@ -209,7 +339,7 @@ pipelines:
             type: host
           affinityGroup: image3
           inputSteps:
-            - name: Bazel_build_insight_sh
+            - name: Bazel_test_insight_sh
           inputResources:
             - name: distroless_base_image
 #          outputResources:
@@ -230,7 +360,7 @@ pipelines:
             type: host
           affinityGroup: image4
           inputSteps:
-            - name: Bazel_build_jfmc_sh
+            - name: Bazel_test_jfmc_sh
           inputResources:
             - name: distroless_base_image
 #          outputResources:
@@ -251,7 +381,7 @@ pipelines:
             type: host
           affinityGroup: image5
           inputSteps:
-            - name: Bazel_build_router_go
+            - name: Bazel_test_router_go
           inputResources:
             - name: distroless_base_image
 #          outputResources:
@@ -272,7 +402,7 @@ pipelines:
             type: host
           affinityGroup: image6
           inputSteps:
-            - name: Bazel_build_xray_go
+            - name: Bazel_test_xray_go
           inputResources:
             - name: distroless_base_image
 #          outputResources:
