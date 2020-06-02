@@ -346,6 +346,7 @@ pipelines:
         execution:
           onExecute:
             - echo "Starting the build"
+            - docker tag bazel/base/jfmc-sh:jfmc-sh chartstesting-distroless-local.jfrog.io/jfmc-sh:${run_number}
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/jfmc-sh:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_router_go
         type: Bash
@@ -376,5 +377,5 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/xray-go:xray-go chartstesting-distroless-local.jfrog.io/xray-go:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/xray_go:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push chartstesting-distroless-local.jfrog.io/xray-go:${run_number} distroless-local --build-name="Distroless_base_image_build" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
 
