@@ -18,8 +18,8 @@ pipelines:
       - name: Start
         type: Bash
         configuration:
-#          inputResources:
-#            - name: file_start
+          inputResources:
+            - name: distroless_base_image
           outputResources:
             - name: distroless_base_image
         execution:
@@ -149,8 +149,8 @@ pipelines:
           affinityGroup: image1
           inputSteps:
             - name: Bazel_build_artifactory_sh
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -168,8 +168,8 @@ pipelines:
           affinityGroup: image2
           inputSteps:
             - name: Bazel_build_distribution_sh
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -187,8 +187,8 @@ pipelines:
           affinityGroup: image3
           inputSteps:
             - name: Bazel_build_insight_sh
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -206,8 +206,8 @@ pipelines:
           affinityGroup: image4
           inputSteps:
             - name: Bazel_build_jfmc_sh
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -225,8 +225,8 @@ pipelines:
           affinityGroup: image5
           inputSteps:
             - name: Bazel_build_router_go
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -244,8 +244,8 @@ pipelines:
           affinityGroup: image6
           inputSteps:
             - name: Bazel_build_xray_go
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
