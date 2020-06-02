@@ -5,7 +5,12 @@ resources:
       gitProvider: shahin_test
       path: shahiinn/jfrog-distroless
       branches:
-        include: ^{{gitBranch}}$       
+        include: ^{{gitBranch}}$ 
+  - name: distroless_base_internal
+    type: GitRepo
+    configuration:
+      gitProvider: shahin_test
+      path: shahiinn/pipe    
   - name: charttestingArtifactory
     type: BuildInfo
     configuration:
