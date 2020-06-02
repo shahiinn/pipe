@@ -18,8 +18,8 @@ pipelines:
       - name: Start
         type: Bash
         configuration:
-          inputResources:
-            - name: distroless_base_image
+#          inputResources:
+#            - name: distroless_base_image
           outputResources:
             - name: distroless_base_image
         execution:
@@ -35,8 +35,8 @@ pipelines:
           affinityGroup: image1
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -54,8 +54,8 @@ pipelines:
           affinityGroup: image2
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -73,8 +73,8 @@ pipelines:
           affinityGroup: image3
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -92,8 +92,8 @@ pipelines:
           affinityGroup: image4
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -111,8 +111,8 @@ pipelines:
           affinityGroup: image5
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -130,8 +130,8 @@ pipelines:
           affinityGroup: image6
           inputSteps:
             - name: Start
-#          inputResources:
-#            - name: distroless_base_image
+          inputResources:
+            - name: distroless_base_image
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
