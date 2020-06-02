@@ -579,9 +579,9 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u artifactory-scan.log distroless-base-logs/${run_number}/artifactory-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "artifactory image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "artifactory image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "artifactory image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "artifactory image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"
 
       - name: Scan_distribution
         type: Bash
@@ -608,9 +608,9 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u distribution-scan.log distroless-base-logs/${run_number}/distribution-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "distribution image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "distribution image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "distribution image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"                       
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "distribution image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"                       
 
       - name: Scan_insight
         type: Bash
@@ -637,9 +637,9 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u insight-scan.log distroless-base-logs/${run_number}/insight-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "insight image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "insight image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "insight image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "insight image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"
 
       - name: Scan_jfmc
         type: Bash
@@ -666,9 +666,9 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u jfmc-scan.log distroless-base-logs/${run_number}/jfmc-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "jfmc image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "jfmc image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "jfmc image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "jfmc image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"
 
       - name: Scan_router
         type: Bash
@@ -695,9 +695,9 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u router-scan.log distroless-base-logs/${run_number}/router-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "router image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "router image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "router image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "router image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"
 
       - name: Scan_xray
         type: Bash
@@ -724,6 +724,6 @@ pipelines:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u xray-scan.log distroless-base-logs/${run_number}/xray-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
             - popd
           onSuccess:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "xray image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "xray image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"
           onFailure:
-            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "xray image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"
+            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "xray image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"
