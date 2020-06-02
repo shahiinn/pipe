@@ -48,6 +48,8 @@ pipelines:
             - echo ${int_artifact_test_user} ${int_artifact_test_apikey}
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/artifactory-sh"
+          onComplete:
+            - popd
       - name: Bazel_build_distribution_sh
         type: Bash
         configuration:
@@ -68,6 +70,8 @@ pipelines:
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/distribution-sh"
+          onComplete:
+            - popd            
       - name: Bazel_build_insight_sh
         type: Bash
         configuration:
@@ -88,6 +92,8 @@ pipelines:
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/insight-sh"
+          onComplete:
+            - popd            
       - name: Bazel_build_jfmc_sh
         type: Bash
         configuration:
@@ -107,7 +113,9 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/jfmc-sh"            
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/jfmc-sh"   
+          onComplete:
+            - popd            
       - name: Bazel_build_router_go
         type: Bash
         configuration:
@@ -127,7 +135,9 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/router-go"            
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/router-go" 
+          onComplete:
+            - popd            
       - name: Bazel_build_xray_go
         type: Bash
         configuration:
@@ -147,7 +157,9 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} chartstesting-distroless-local.jfrog.io
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/xray-go"    
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 chartstesting-distroless-local.jfrog.io/bazel-docker-builder:v1 bash -c "bazel build base/xray-go"
+          onComplete:
+            - popd            
       - name: Bazel_run_artifactory_sh
         type: Bash
         configuration:
