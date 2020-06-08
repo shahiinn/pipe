@@ -3,6 +3,7 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
+          DOCKERFILELOC: customize-example
           DOCKERREPO: chartstesting-distroless-local.jfrog.io
           LOGS_URL: https://chartstesting.jfrog.io/artifactory/distroless-base-logs
           JFROG_CLI_BUILD_NAME: "Distroless_base_image_build"
@@ -34,12 +35,14 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a $LOG_FILE
           onComplete:
@@ -62,12 +65,14 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -90,6 +95,7 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -98,6 +104,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -120,6 +127,7 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -128,6 +136,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -150,6 +159,7 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -158,6 +168,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -180,6 +191,7 @@ pipelines:
             - name: Start
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -188,6 +200,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -213,12 +226,14 @@ pipelines:
             - name: Bazel_build_artifactory_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -241,12 +256,14 @@ pipelines:
             - name: Bazel_build_distribution_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -269,12 +286,14 @@ pipelines:
             - name: Bazel_build_insight_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -297,12 +316,14 @@ pipelines:
             - name: Bazel_build_jfmc_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -325,12 +346,14 @@ pipelines:
             - name: Bazel_build_router_go
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
           integrations:
             - name: artifact_test
         execution:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -353,6 +376,7 @@ pipelines:
             - name: Bazel_build_xray_go
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -361,6 +385,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
@@ -386,6 +411,7 @@ pipelines:
             - name: Bazel_test_artifactory_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -394,6 +420,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/artifactory-sh" 2>&1 | tee -a artifactory-base-run.log
             - docker images
@@ -417,6 +444,7 @@ pipelines:
             - name: Bazel_test_distribution_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -425,6 +453,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/distribution-sh" 2>&1 | tee -a distribution-base-run.log
             - docker images
@@ -448,6 +477,7 @@ pipelines:
             - name: Bazel_test_insight_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -456,6 +486,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/insight-sh" 2>&1 | tee -a insight-base-run.log
             - docker images
@@ -479,6 +510,7 @@ pipelines:
             - name: Bazel_test_jfmc_sh
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -487,6 +519,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/jfmc-sh" 2>&1 | tee -a jfmc-base-run.log
             - docker images
@@ -503,6 +536,7 @@ pipelines:
             - name: Bazel_test_router_go
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -511,6 +545,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/router-go" 2>&1 | tee -a router-base-run.log
             - docker images
@@ -534,6 +569,7 @@ pipelines:
             - name: Bazel_test_xray_go
           inputResources:
             - name: distroless_base_image
+            - name: distroless_base_internal
 #          outputResources:
 #            - name: charttestingArtifactory
           integrations:
@@ -542,6 +578,7 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
+            - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/xray-go" 2>&1 | tee -a xray-base-run.log
             - docker images
@@ -667,7 +704,6 @@ pipelines:
             - name: artifact_test
           inputResources:
             - name: distroless_base_internal
-            - name: distroless_base_image
             - name: distroless_base_artifactory
         execution:
           onExecute:
@@ -696,7 +732,6 @@ pipelines:
             - name: artifact_test
           inputResources:
             - name: distroless_base_internal
-            - name: distroless_base_image
             - name: distroless_base_distribution
         execution:
           onExecute:
@@ -727,7 +762,6 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_insight
-            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -757,7 +791,6 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_jfmc
-            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -787,7 +820,6 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_router
-            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -817,7 +849,6 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_xray
-            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
