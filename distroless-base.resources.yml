@@ -1,0 +1,55 @@
+resources:
+  - name: distroless_base_image
+    type: GitRepo
+    configuration:
+      gitProvider: shahin_test
+      path: shahiinn/jfrog-distroless
+      branches:
+        include: ^{{gitBranch}}$ 
+  - name: distroless_base_internal
+    type: GitRepo
+    configuration:
+      gitProvider: shahin_test
+      path: shahiinn/pipe    
+  - name: charttestingArtifactory
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build
+      buildNumber: ${run_number}
+  - name: distroless_base_artifactory
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_artifactory
+      buildNumber: ${run_number}
+  - name: distroless_base_distribution
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_distribution
+      buildNumber: ${run_number}
+  - name: distroless_base_jfmc
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_jfmc
+      buildNumber: ${run_number}
+  - name: distroless_base_insight
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_insight
+      buildNumber: ${run_number}
+  - name: distroless_base_router
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_router
+      buildNumber: ${run_number}
+  - name: distroless_base_xray
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifact_test
+      buildName: Distroless_base_image_build_xray
+      buildNumber: ${run_number}
