@@ -25,7 +25,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: artifactory-base-build.log
               IMAGE_FOLDER: artifactory_sh
           runtime:
@@ -54,7 +53,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: distribution-base-build.log
               IMAGE_FOLDER: distribution_sh
           runtime:
@@ -83,7 +81,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: insight-base-build.log
               IMAGE_FOLDER: insight_sh
           runtime:
@@ -114,7 +111,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: jfmc-base-build.log
               IMAGE_FOLDER: jfmc_sh
           runtime:
@@ -145,7 +141,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: router-base-build.log
               IMAGE_FOLDER: router_go
           runtime:
@@ -176,7 +171,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: xray-base-build.log
               IMAGE_FOLDER: xray_go
           runtime:
@@ -210,7 +204,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: artifactory-base-test.log
               IMAGE_FOLDER: artifactory_sh
           runtime:
@@ -239,7 +232,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: distribution-base-test.log
               IMAGE_FOLDER: distribution_sh
           runtime:
@@ -268,7 +260,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: insight-base-test.log
               IMAGE_FOLDER: insight_sh
           runtime:
@@ -297,7 +288,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: jfmc-base-test.log
               IMAGE_FOLDER: jfmc_sh
           runtime:
@@ -326,7 +316,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: router-base-test.log
               IMAGE_FOLDER: router_go
           runtime:
@@ -355,7 +344,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: xray-base-test.log
               IMAGE_FOLDER: xray_go
           runtime:
@@ -389,7 +377,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: artifactory-base-run.log
               IMAGE_FOLDER: artifactory_sh
           runtime:
@@ -421,7 +408,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: distribution-base-run.log
               IMAGE_FOLDER: distribution_sh
           runtime:
@@ -453,7 +439,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: insight-base-build.log
               IMAGE_FOLDER: insight_go
           runtime:
@@ -485,7 +470,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: jfmc-base-run.log
               IMAGE_FOLDER: jfmc_sh
           runtime:
@@ -510,7 +494,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: router-base-run.log
               IMAGE_FOLDER: router_go
           runtime:
@@ -542,7 +525,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: xray-base-run.log
               IMAGE_FOLDER: xray_go
           runtime:
@@ -676,7 +658,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: artifactory-base-scan.log
               IMAGE_FOLDER: artifactory_sh
           affinityGroup: image1
@@ -705,7 +686,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: distribution-base-scan.log
               IMAGE_FOLDER: distribution_sh
           affinityGroup: image1
@@ -735,7 +715,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: insight-base-scan.log
               IMAGE_FOLDER: insight_sh
           affinityGroup: image1
@@ -765,7 +744,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: jfmc-base-scan.log
               IMAGE_FOLDER: jfmc_sh
           affinityGroup: image1
@@ -795,7 +773,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: router-base-scan.log
               IMAGE_FOLDER: router_go
           affinityGroup: image1
@@ -825,7 +802,6 @@ pipelines:
         type: Bash
         configuration:
           environmentVariables:
-            readOnly:
               LOG_FILE: xray-base-scan.log
               IMAGE_FOLDER: xray_go
           affinityGroup: image1
