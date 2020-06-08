@@ -24,6 +24,10 @@ pipelines:
       - name: Bazel_build_artifactory_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: artifactory-base-build.log
+              IMAGE_FOLDER: artifactory_sh
           runtime:
             type: host
           affinityGroup: image1
@@ -38,12 +42,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/artifactory-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a $LOG_FILE
           onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_build_distribution_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: distribution-base-build.log
+              IMAGE_FOLDER: distribution_sh
           runtime:
             type: host
           affinityGroup: image2
@@ -58,12 +71,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/distribution-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_build_insight_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: insight-base-build.log
+              IMAGE_FOLDER: insight_sh
           runtime:
             type: host
           affinityGroup: image3
@@ -80,12 +102,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/insight-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_build_jfmc_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: jfmc-base-build.log
+              IMAGE_FOLDER: jfmc_sh
           runtime:
             type: host
           affinityGroup: image4
@@ -102,12 +133,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/jfmc-sh"   
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_build_router_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: router-base-build.log
+              IMAGE_FOLDER: router_go
           runtime:
             type: host
           affinityGroup: image5
@@ -124,12 +164,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/router-go" 
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_build_xray_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: xray-base-build.log
+              IMAGE_FOLDER: xray_go
           runtime:
             type: host
           affinityGroup: image6
@@ -146,15 +195,24 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/xray-go"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel build base/${IMAGE_FOLDER}" 2>&1 | tee -a ${LOG_FILE}
           onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base build failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
             
 ## bazel test
 
       - name: Bazel_test_artifactory_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: artifactory-base-test.log
+              IMAGE_FOLDER: artifactory_sh
           runtime:
             type: host
           affinityGroup: image1
@@ -169,12 +227,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_test_distribution_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: distribution-base-test.log
+              IMAGE_FOLDER: distribution_sh
           runtime:
             type: host
           affinityGroup: image2
@@ -189,12 +256,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_test_insight_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: insight-base-test.log
+              IMAGE_FOLDER: insight_sh
           runtime:
             type: host
           affinityGroup: image3
@@ -209,12 +285,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_test_jfmc_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: jfmc-base-test.log
+              IMAGE_FOLDER: jfmc_sh
           runtime:
             type: host
           affinityGroup: image4
@@ -229,12 +314,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."   
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_test_router_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: router-base-test.log
+              IMAGE_FOLDER: router_go
           runtime:
             type: host
           affinityGroup: image5
@@ -249,12 +343,21 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
-            - popd            
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_test_xray_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: xray-base-test.log
+              IMAGE_FOLDER: xray_go
           runtime:
             type: host
           affinityGroup: image6
@@ -271,15 +374,24 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..."
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel test --test_output=errors --curses=no //..." 2>&1 | tee -a ${LOG_FILE}
           onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image test failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
             
 ## bazel run            
             
       - name: Bazel_run_artifactory_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: artifactory-base-run.log
+              IMAGE_FOLDER: artifactory_sh
           runtime:
             type: host
           affinityGroup: image1
@@ -296,11 +408,22 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/artifactory-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/artifactory-sh" 2>&1 | tee -a artifactory-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_run_distribution_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: distribution-base-run.log
+              IMAGE_FOLDER: distribution_sh
           runtime:
             type: host
           affinityGroup: image2
@@ -317,11 +440,22 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/distribution-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/distribution-sh" 2>&1 | tee -a distribution-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_run_insight_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: insight-base-build.log
+              IMAGE_FOLDER: insight_go
           runtime:
             type: host
           affinityGroup: image3
@@ -338,11 +472,22 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/insight-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/insight-sh" 2>&1 | tee -a insight-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_run_jfmc_sh
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: jfmc-base-run.log
+              IMAGE_FOLDER: jfmc_sh
           runtime:
             type: host
           affinityGroup: image4
@@ -359,11 +504,15 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/jfmc-sh"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/jfmc-sh" 2>&1 | tee -a jfmc-base-run.log
             - docker images
       - name: Bazel_run_router_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: router-base-run.log
+              IMAGE_FOLDER: router_go
           runtime:
             type: host
           affinityGroup: image5
@@ -380,11 +529,22 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/router-go"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/router-go" 2>&1 | tee -a router-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Bazel_run_xray_go
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: xray-base-run.log
+              IMAGE_FOLDER: xray_go
           runtime:
             type: host
           affinityGroup: image6
@@ -401,8 +561,15 @@ pipelines:
             - echo "Starting the build"
             - pushd $res_distroless_base_image_resourcePath
             - docker login -u ${int_artifact_test_user} -p ${int_artifact_test_apikey} ${DOCKERREPO}
-            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/xray-go"
+            - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/xray-go" 2>&1 | tee -a xray-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
 
 ## docker push
 
@@ -420,8 +587,8 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/artifactory-sh:artifactory-sh ${DOCKERREPO}/artifactory-sh:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/artifactory-sh:${run_number} distroless-local --build-name="Distroless_base_image_build_artifactory" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_artifactory ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/artifactory-sh:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_artifactory" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_distribution_sh
         type: Bash
         configuration:
@@ -436,8 +603,8 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/distribution-sh:distribution-sh ${DOCKERREPO}/distribution-sh:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/distribution-sh:${run_number} distroless-local --build-name="Distroless_base_image_build_distribution" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_distribution ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/distribution-sh:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_distribution" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_distribution ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_insight_sh
         type: Bash
         configuration:
@@ -452,8 +619,8 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/insight-sh:insight-sh ${DOCKERREPO}/insight-sh:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/insight-sh:${run_number} distroless-local --build-name="Distroless_base_image_build_insight" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_insight ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/insight-sh:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_insight" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_insight ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_jfmc_sh
         type: Bash
         configuration:
@@ -468,8 +635,8 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/jfmc-sh:jfmc-sh ${DOCKERREPO}/jfmc-sh:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/jfmc-sh:${run_number} distroless-local --build-name="Distroless_base_image_build_jfmc" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_jfmc ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/jfmc-sh:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_jfmc" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_jfmc ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_router_go
         type: Bash
         configuration:
@@ -484,8 +651,8 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/router-go:router-go ${DOCKERREPO}/router-go:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/router-go:${run_number} distroless-local --build-name="Distroless_base_image_build_router" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_router ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/router-go:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_router" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_router ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
       - name: Push_xray_go
         type: Bash
         configuration:
@@ -500,14 +667,18 @@ pipelines:
           onExecute:
             - echo "Starting the build"
             - docker tag bazel/base/xray-go:xray-go ${DOCKERREPO}/xray-go:${run_number}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/xray-go:${run_number} distroless-local --build-name="Distroless_base_image_build_xray" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp Distroless_base_image_build_xray ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt docker-push ${DOCKERREPO}/xray-go:${run_number} distroless-local --build-name="${JFROG_CLI_BUILD_NAME}_xray" --build-number=${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bp ${JFROG_CLI_BUILD_NAME}_xray ${run_number} --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey}
 
 ## Xray Scan
 
       - name: Scan_artifactory
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: artifactory-base-scan.log
+              IMAGE_FOLDER: artifactory_sh
           affinityGroup: image1
           inputSteps:
             - name: Push_artifactory_sh
@@ -519,24 +690,24 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a artifactory-scan.log
-            - | 
-              vul_count=$(cat artifactory-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat artifactory-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
+            - |
+              vul_count=$(cat artifactory-scan.log | grep "\"severity\": \"High\"" | wc -l)
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u artifactory-scan.log distroless-base-logs/${run_number}/artifactory-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "artifactory image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "artifactory image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/artifactory-scan.log"
-
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
       - name: Scan_distribution
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: distribution-base-scan.log
+              IMAGE_FOLDER: distribution_sh
           affinityGroup: image1
           inputSteps:
             - name: Push_distribution_sh
@@ -548,24 +719,25 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_distribution ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a distribution-scan.log
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_distribution ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
             - | 
               vul_count=$(cat distribution-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat distribution-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u distribution-scan.log distroless-base-logs/${run_number}/distribution-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "distribution image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "distribution image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/distribution-scan.log"                       
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
 
       - name: Scan_insight
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: insight-base-scan.log
+              IMAGE_FOLDER: insight_sh
           affinityGroup: image1
           inputSteps:
             - name: Push_insight_sh
@@ -577,24 +749,25 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a insight-scan.log
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
             - | 
               vul_count=$(cat insight-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat insight-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u insight-scan.log distroless-base-logs/${run_number}/insight-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "insight image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "insight image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/insight-scan.log"
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
 
       - name: Scan_jfmc
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: jfmc-base-scan.log
+              IMAGE_FOLDER: jfmc_sh
           affinityGroup: image1
           inputSteps:
             - name: Push_jfmc_sh
@@ -606,24 +779,25 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a jfmc-scan.log
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
             - | 
               vul_count=$(cat jfmc-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat jfmc-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u jfmc-scan.log distroless-base-logs/${run_number}/jfmc-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "jfmc image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "jfmc image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/jfmc-scan.log"
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
 
       - name: Scan_router
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: router-base-scan.log
+              IMAGE_FOLDER: router_go
           affinityGroup: image1
           inputSteps:
             - name: Push_router_go
@@ -635,24 +809,25 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a router-scan.log
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
             - | 
               vul_count=$(cat router-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat router-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u router-scan.log distroless-base-logs/${run_number}/router-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "router image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "router image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/router-scan.log"
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
 
       - name: Scan_xray
         type: Bash
         configuration:
+          environmentVariables:
+            readOnly:
+              LOG_FILE: xray-base-scan.log
+              IMAGE_FOLDER: xray_go
           affinityGroup: image1
           inputSteps:
             - name: Push_xray_go
@@ -664,17 +839,14 @@ pipelines:
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs Distroless_base_image_build_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a xray-scan.log
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt bs ${JFROG_CLI_BUILD_NAME}_artifactory ${run_number} --fail=false --server-id=chartstesting --url=${int_artifact_test_url} --user=${int_artifact_test_user} --password=${int_artifact_test_apikey} 2>&1 | tee -a ${LOG_FILE}
             - | 
               vul_count=$(cat xray-scan.log | grep "\"severity\": \"High\"" | wc -l);
-              if cat xray-scan.log | grep -e "issues found during xray build scan" > /dev/null; then
-                  echo "Xray scan failed!"
-                  exit 1
-              fi
+
           onComplete:
-            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u xray-scan.log distroless-base-logs/${run_number}/xray-scan.log --server-id chartstesting --url ${int_artifact_test_url} --user ${int_artifact_test_user} --password ${int_artifact_test_apikey}
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
             - popd
           onSuccess:
-            - 'update_commit_status_custom distroless_base_image --context "${step_name}" --message "xray image Xray scan : Found $vul_count security issues" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"'
+            - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
-            - update_commit_status_custom distroless_base_image --context "${step_name}" --message "xray image Xray scan failed with $vul_count security issues!" --url "https://chartstesting.jfrog.io/artifactory/distroless-base-logs/${run_number}/xray-scan.log"
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
