@@ -6,7 +6,8 @@ pipelines:
           DOCKERFILELOC: customize-example
           DOCKERREPO: chartstesting-distroless-local.jfrog.io
           LOGS_URL: https://chartstesting.jfrog.io/artifactory/distroless-base-logs
-          JFROG_CLI_BUILD_NAME: "Distroless_base_image_build"  
+          JFROG_CLI_BUILD_NAME: "Distroless_base_image_build"
+          UPDATE_REPO_NAME: distroless_base_image
     steps:    
       - name: Start
         type: Bash
