@@ -523,6 +523,13 @@ pipelines:
             - docker login -u ${int_charts_rt_user} -p ${int_charts_rt_apikey} ${DOCKERREPO}
             - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":/usr/src/app -e BUILD_NUMBER=11 ${DOCKERREPO}/bazel-docker-builder:v1 bash -c "bazel run base/jfmc-sh" 2>&1 | tee -a jfmc-base-run.log
             - docker images
+          onComplete:
+            - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
+            - popd
+          onSuccess:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run successful" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"
+          onFailure:
+            - update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image bazel run failed!" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"       
       - name: Bazel_run_router_go
         type: Bash
         configuration:
