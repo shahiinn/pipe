@@ -705,6 +705,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_artifactory
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -714,7 +715,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
@@ -733,6 +733,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_distribution
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -742,7 +743,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
@@ -762,6 +762,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_insight
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -771,7 +772,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
@@ -791,6 +791,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_jfmc
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -800,7 +801,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
@@ -820,6 +820,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_router
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -829,7 +830,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
@@ -849,6 +849,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_xray
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -858,7 +859,6 @@ pipelines:
 
           onComplete:
             - export JFROG_CLI_OFFER_CONFIG=false; jfrog rt u ${LOG_FILE} distroless-base-logs/${run_number}/${LOG_FILE} --server-id chartstesting --url ${int_charts_rt_url} --user ${int_charts_rt_user} --password ${int_charts_rt_apikey}
-            - popd
           onSuccess:
             - 'update_commit_status_custom ${UPDATE_REPO_NAME} --context "${step_name}" --message "${IMAGE_FOLDER} base image scan : Found $vul_count security issues" --url "${LOGS_URL}/${run_number}/${LOG_FILE}"'
           onFailure:
