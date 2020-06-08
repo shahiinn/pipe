@@ -3,7 +3,6 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
-          DOCKERFILELOC: customize-example
           DOCKERREPO: chartstesting-distroless-local.jfrog.io
           LOGS_URL: https://chartstesting.jfrog.io/artifactory/distroless-base-logs
           JFROG_CLI_BUILD_NAME: "Distroless_base_image_build"
@@ -668,6 +667,7 @@ pipelines:
             - name: artifact_test
           inputResources:
             - name: distroless_base_internal
+            - name: distroless_base_image
             - name: distroless_base_artifactory
         execution:
           onExecute:
@@ -696,6 +696,7 @@ pipelines:
             - name: artifact_test
           inputResources:
             - name: distroless_base_internal
+            - name: distroless_base_image
             - name: distroless_base_distribution
         execution:
           onExecute:
@@ -726,6 +727,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_insight
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -755,6 +757,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_jfmc
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -784,6 +787,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_router
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
@@ -813,6 +817,7 @@ pipelines:
           inputResources:
             - name: distroless_base_internal
             - name: distroless_base_xray
+            - name: distroless_base_image
         execution:
           onExecute:
             - source ${res_distroless_base_internal_resourcePath}/test/custom.sh
