@@ -23,13 +23,13 @@ pipelines:
           onExecute:
             - echo $my_env_var
  
-  - name: artifactory_installer_oss_build
-    type: MvnBuild
-    configuration:
-      sourceLocation: maven-example
-      mvnCommand: install 
-      inputSteps:
-        - name: step_1
-      inputResources:
-        - name: myGitRepo
-          trigger: true
+      - name: artifactory_installer_oss_build
+        type: MvnBuild
+        configuration:
+          sourceLocation: maven-example
+          mvnCommand: install 
+          inputSteps:
+            - name: step_1
+          inputResources:
+            - name: myGitRepo
+              trigger: true
